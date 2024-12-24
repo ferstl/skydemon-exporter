@@ -1,0 +1,15 @@
+Swiss VFR Manual
+- Blubb Airfield (LSXX)/
+  - AD INFO LSXX (2024-03-20).pdf
+  - Visual Approach Chart LSGC (2023-09-18).pdf
+  - Area Chart LSGC (2019-09-22).pdf
+  - archive/
+    - Area Chart LSGC (2019-04-03).pdf
+    - Visual Approach Chart LSGC (2022-01-15).pdf
+    - AD INFO LSXX (2023-07-15).pdf
+
+- Fump Airfield (LSXY)/
+  - xxx
+
+- updates.txt
+
