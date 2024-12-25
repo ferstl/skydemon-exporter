@@ -57,15 +57,21 @@ public class Document {
     return this.skydemonDocumentName;
   }
 
-  public String fileName() {
-    String baseName = switch (this.type) {
+  public String exportFileName() {
+    return exportName() + ".pdf";
+  }
+
+  public String exportName() {
+    return exportNameWithoutDate() + " (" + this.effectiveDate.toLocalDate() + ")";
+  }
+
+  public String exportNameWithoutDate() {
+    return switch (this.type) {
       case CHART -> this.name + (this.isForHelicopter && !this.nameContainsHelicopter ? " (Hel)" : "") + " " + this.icaoCode;
       case AD_INFO -> "AD INFO " + this.icaoCode + (this.isForHelicopter ? " (Hel)" : "");
       case GUIDE -> this.name;
       case SUPPLEMENT -> (this.nameContainsSupplement ? "" : "SUP ") + this.name.replaceAll("/", "-");
     };
-
-    return baseName + " (" + this.effectiveDate.toLocalDate() + ")" + ".pdf";
   }
 
   public enum Type {

@@ -5,13 +5,13 @@ import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Properties;
+import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -46,14 +46,45 @@ public class Main {
           targetDir : targetDir.resolve(airfieldNames.getProperty(icao, icao) + " (" + icao + ")");
       Files.createDirectories(airfieldDir);
 
+      Set<Path> existingFiles;
+      try (Stream<Path> files = Files.list(airfieldDir)) {
+        existingFiles = files.filter(Files::isRegularFile)
+            .collect(Collectors.toSet());
+      }
+
+      int index = 2;
       for (Document document : documents) {
         Path sourceFile = platesDir.resolve(document.skydemonDocumentName());
-        Path targetFile = airfieldDir.resolve(document.fileName());
+        Path targetFile = airfieldDir.resolve(document.exportFileName());
         if (Files.exists(sourceFile)) {
-          Files.copy(sourceFile, targetFile, StandardCopyOption.REPLACE_EXISTING);
+          if (!existingFiles.contains(targetFile)) {
+            // There are some cases which lead to the same target file multiple times, e.g. Visual Approach Chart LSZM
+            // Therefore we need to double-check if the file already exists and resolve the conflict
+            if (Files.exists(targetFile)) {
+              String newFileName = targetFile.getFileName().toString().replace(".pdf", "-" + index + ".pdf");
+              System.out.println("Resolving conflict: " + targetFile.getFileName() + " -> " + newFileName);
+              index++;
+              targetFile = targetFile.getParent().resolve(newFileName);
+              if (Files.exists(targetFile)) {
+                existingFiles.remove(targetFile);
+                continue;
+              }
+            }
+            Files.copy(sourceFile, targetFile);
+          } else {
+            System.out.println("Unchanged file: " + targetFile);
+          }
+
+          existingFiles.remove(targetFile);
+
         } else {
-          System.out.println("Skipping " + document.fileName() + " (source file not found)");
+          System.out.println("Skipping " + document.exportFileName() + " (source file not found)");
         }
+      }
+
+      for (Path existingFile : existingFiles) {
+        System.out.println("Deleting " + existingFile);
+        Files.delete(existingFile);
       }
     }
   }
