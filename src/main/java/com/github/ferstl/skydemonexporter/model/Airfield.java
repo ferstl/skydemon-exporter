@@ -18,4 +18,10 @@ public record Airfield(
     List<Plate> plates
 ) {
 
+  // There might be entries like
+  // <Airfield ProductCode="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" ValidityTime="20241228114418" />
+  @Override
+  public List<Plate> plates() {
+    return this.plates != null ? this.plates : List.of();
+  }
 }
