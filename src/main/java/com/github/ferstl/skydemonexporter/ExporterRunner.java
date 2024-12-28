@@ -52,9 +52,22 @@ public class ExporterRunner implements Callable<Integer> {
   }
 
   private static Path findSkyDemonData() throws IOException {
-    Path targetDir = Paths.get(System.getProperty("user.home"), "Library", "Containers");
+    String os = System.getProperty("os.name");
 
-    try (Stream<Path> files = Files.list(targetDir)) {
+    if (os.toLowerCase().startsWith("mac")) {
+      return findSkyDemonDataForMac();
+    }
+    if (os.toLowerCase().startsWith("windows")) {
+      return findSkyDemonDataForWindows();
+    }
+
+    throw new IllegalStateException("Unsupported OS: " + os);
+  }
+
+  private static Path findSkyDemonDataForMac() throws IOException {
+    Path dataDir = Paths.get(System.getProperty("user.home"), "Library", "Containers");
+
+    try (Stream<Path> files = Files.list(dataDir)) {
       Path candidateDirectory = files
           .filter(Files::isReadable)
           .filter(Files::isDirectory)
@@ -62,10 +75,20 @@ public class ExporterRunner implements Callable<Integer> {
           .filter(Files::isExecutable)
           .filter(directory -> Files.exists(directory.resolve("Data/Library/Plates/index.xml")))
           .findAny()
-          .orElseThrow(() -> new IllegalStateException("No candidate SkyDemon directory found in " + targetDir));
+          .orElseThrow(() -> new IllegalStateException("No candidate SkyDemon directory found in " + dataDir));
 
       return candidateDirectory.resolve("Data/Library/Plates");
     }
+  }
+
+  private static Path findSkyDemonDataForWindows() throws IOException {
+    Path indexLocation = Paths.get(System.getenv("APPDATA"), "Divelements Limited", "SkyDemon Plan", "Plates", "index.xml");
+
+    if (!Files.exists(indexLocation)) {
+      return indexLocation.getParent();
+    }
+
+    throw new IllegalStateException("No SkyDemon data found in " + indexLocation.getParent());
   }
 
   private static Properties readAirfieldNames() {
