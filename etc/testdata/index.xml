@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<AirfieldPlateIndex Produced="20241230000000">
+  <Publishers>
+    <Publisher ID="7" Name="Skyguide"/>
+    <Publisher ID="1" Name="Civil AIP"/>
+    <Publisher ID="5" Name="DFS"/>
+    <Publisher ID="8" Name="Rogers Data"/>
+  </Publishers>
+
+  <!-- Regular Airfield -->
+  <Airfield ICAO="LSZH" ValidityTime="20241230000000">
+    <!-- Supplement -->
+    <Plate ID="100000" Publisher="7" Name="SUP 002/24 XXX XXXX XXXX" OriginalFilename="LS_SUP_24002_000000.pdf" Category="" Size="0" ProductCode="00000000-0000-0000-0000-000000000000" EffectiveDate="20240613000000" Type="8" Withdrawn="False"/>
+    <Plate ID="100001" Publisher="7" Name="Visual Approach Chart" OriginalFilename="2024-12-30_lszh aaaa aaaa aaaa.pdf" Category="" Size="0" ProductCode="00000000-0000-0000-0000-000000000000" EffectiveDate="20240905000000" Type="4" Withdrawn="False"/>
+    <Plate ID="100002" Publisher="7" Name="Visual Departure Chart" OriginalFilename="2024-12-30_lszh bbbb bbbb bbbb.pdf" Category="" Size="0" ProductCode="00000000-0000-0000-0000-000000000000" EffectiveDate="20240905000000" Type="4" Withdrawn="False"/>
+    <!-- Helicopter -->
+    <!-- 1) "OriginalFilename" contains 'hel' indicates that the chart is for helicopters. -->
+    <!-- 2) "Name" may indicate that the chart is for helicopters -->
+    <Plate ID="100003" Publisher="7" Name="Visual Approach Chart (Hel)" OriginalFilename="2024-12-30_LSZH HEL cccc ccccc.pdf" Category="" Size="0" ProductCode="00000000-0000-0000-0000-000000000000" EffectiveDate="20240905000000" Type="4" Withdrawn="False"/>
+    <Plate ID="100004" Publisher="7" Name="AD Info (Helicopters)" OriginalFilename="LS_ADINFO_0000_LSZH_dddHEL ddd dddd.pdf" Category="" Size="0" ProductCode="00000000-0000-0000-0000-000000000000" EffectiveDate="20241003000000" Type="2" Withdrawn="False"/>
+  </Airfield>
+
+  <!-- Conflicting Chart names -->
+  <Airfield ICAO="LSZM" ValidityTime="20241230000000">
+    <Plate ID="100005" Publisher="7" Name="Visual Approach Chart" OriginalFilename="2024-12-30_LSZM_aaaa aaaa aaaa.pdf" Category="" Size="0" ProductCode="00000000-0000-0000-0000-000000000000" EffectiveDate="20240905000000" Type="4" Withdrawn="False"/>
+    <Plate ID="100006" Publisher="7" Name="Visual Approach Chart" OriginalFilename="2024-12-30_LSZM_bbbb bbbb bbbb.pdf" Category="" Size="0" ProductCode="00000000-0000-0000-0000-000000000000" EffectiveDate="20240905000000" Type="4" Withdrawn="False"/>
+  </Airfield>
+
+  <!-- Supplements and VFR Guide -->
+  <Airfield ProductCode="00000000-0000-0000-0000-000000000000" ValidityTime="20241230000000">
+    <Plate ID="800000" Publisher="7" Name="SUP 001/24 AAAA AAAA AAAA" OriginalFilename="LS_SUP_24001_000000.pdf" Category="" Size="0" ProductCode="00000000-0000-0000-0000-000000000000" EffectiveDate="20231130000000" Type="8" Withdrawn="False"/>
+    <Plate ID="800001" Publisher="7" Name="VFR Guide (de)" OriginalFilename="eGEN_de.pdf" Category="" Size="0" ProductCode="00000000-0000-0000-0000-000000000000" EffectiveDate="20241226000000" Type="8" Withdrawn="False"/>
+    <Plate ID="800002" Publisher="7" Name="VFR Guide (en)" OriginalFilename="eGEN_en.pdf" Category="" Size="0" ProductCode="00000000-0000-0000-0000-000000000000" EffectiveDate="20241226000000" Type="8" Withdrawn="False"/>
+  </Airfield>
+
+  <!-- Empty airfiled -->
+  <Airfield ProductCode="00000000-0000-0000-0000-000000000000" ValidityTime="20241230000000"/>
+
+  <!-- Not yet supported publisher(s) -->
+  <Airfield ICAO="LOXX" ValidityTime="20241230000000">
+    <Plate ID="900000" Publisher="1" Name="AAAA" OriginalFilename="AAAA.pdf" Category="AIP|LO|AD" Size="0" ProductCode="00000000-0000-0000-0000-000000000000" EffectiveDate="20201106000000" Type="10" Withdrawn="False"/>
+    <Plate ID="900001" Publisher="8" Name="BBBB" OriginalFilename="BBBB.pdf" Category="" Size="0" ProductCode="00000000-0000-0000-0000-000000000000" EffectiveDate="20240325000000" Type="4" Withdrawn="False"/>
+  </Airfield>
+</AirfieldPlateIndex>
