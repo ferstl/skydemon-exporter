@@ -1,0 +1,36 @@
+name: Maven Build
+
+on:
+  push:
+  pull_request:
+    branches: [ 'master' ]
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [ 'macos-latest', 'windows-latest' ]
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up GraalVM
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'graalvm'
+          cache: maven
+      - name: Maven Build
+        run: mvn -B package -Pnative --file pom.xml
+      - name: 'Upload Artifact'
+        uses: actions/upload-artifact@v4
+        with:
+          path: 'target/sdexport*'
+          name: binary-${{ matrix.os }}
+      - name: 'Create Release'
+        if: ${{ startsWith(github.ref, 'refs/tags/') }}
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: 'target/sdexport*'
+          allowUpdates: true
+          omitNameDuringUpdate: 'true'
