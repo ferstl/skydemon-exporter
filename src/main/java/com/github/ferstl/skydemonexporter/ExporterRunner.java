@@ -1,14 +1,21 @@
 package com.github.ferstl.skydemonexporter;
 
+import java.io.InputStream;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.Properties;
 import java.util.concurrent.Callable;
+import com.github.ferstl.skydemonexporter.ExporterRunner.FileVersionProvider;
 import picocli.CommandLine;
+import picocli.CommandLine.Command;
+import picocli.CommandLine.IVersionProvider;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
 import static com.github.ferstl.skydemonexporter.EnvironmentUtil.expandUserHome;
 import static com.github.ferstl.skydemonexporter.EnvironmentUtil.readAirfieldNames;
 
+@Command(name = "sdexport", versionProvider = FileVersionProvider.class)
 public class ExporterRunner implements Callable<Integer> {
 
   @Option(
@@ -19,9 +26,16 @@ public class ExporterRunner implements Callable<Integer> {
   private boolean helpRequested;
 
   @Option(
+      names = {"-v", "--version"},
+      versionHelp = true,
+      description = "Display version information"
+  )
+  private boolean versionRequested;
+
+  @Option(
       names = {"-d", "--data"},
       paramLabel = "DIRECTORY",
-      description = "Directory containing the SkyDemon files and the index.xml"
+      description = "Directory containing SkyDemon's index.xml and data."
   )
   private String platesDir;
 
@@ -45,4 +59,18 @@ public class ExporterRunner implements Callable<Integer> {
     return 0;
   }
 
+  static class FileVersionProvider implements IVersionProvider {
+
+    public String[] getVersion() throws Exception {
+      URL url = getClass().getResource("/version.txt");
+      if (url == null) {
+        return new String[]{"${COMMAND-FULL-NAME} unknown version"};
+      }
+
+      try (InputStream is = url.openStream()) {
+        String version = new String(is.readAllBytes(), StandardCharsets.UTF_8);
+        return new String[]{"${COMMAND-FULL-NAME} " + version};
+      }
+    }
+  }
 }

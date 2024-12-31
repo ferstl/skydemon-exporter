@@ -73,6 +73,25 @@
       </plugins>
     </pluginManagement>
     <plugins>
+      <!-- Generate a version file -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-help-plugin</artifactId>
+        <version>3.5.1</version>
+        <executions>
+          <execution>
+            <id>generate-version-file</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>evaluate</goal>
+            </goals>
+            <configuration>
+              <expression>project.version</expression>
+              <output>${project.build.outputDirectory}/version.txt</output>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
       <!-- Run the application with testdata and generate the native image metadata -->
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
