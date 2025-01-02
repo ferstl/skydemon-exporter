@@ -92,57 +92,6 @@
           </execution>
         </executions>
       </plugin>
-      <!-- Run the application with testdata and generate the native image metadata -->
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>exec-maven-plugin</artifactId>
-        <version>3.5.0</version>
-        <executions>
-          <execution>
-            <id>agent</id>
-            <goals>
-              <goal>exec</goal>
-            </goals>
-            <phase>test</phase>
-            <configuration>
-              <executable>java</executable>
-              <workingDirectory>${project.build.directory}</workingDirectory>
-              <arguments>
-                <argument>-classpath</argument>
-                <classpath/>
-                <argument>-agentlib:native-image-agent=config-output-dir=${project.build.outputDirectory}/META-INF/native-image/com.github.ferstl/skydemon-exporter</argument>
-                <argument>${mainClass}</argument>
-                <argument>--data</argument>
-                <argument>${project.basedir}/etc/testdata</argument>
-                <argument>${agent-run.directory}</argument>
-              </arguments>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <!-- Remove the directory that was created by the previous run -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-clean-plugin</artifactId>
-        <version>3.3.2</version>
-        <executions>
-          <execution>
-            <id>clean-data</id>
-            <phase>test</phase>
-            <goals>
-              <goal>clean</goal>
-            </goals>
-            <configuration>
-              <excludeDefaultDirectories>true</excludeDefaultDirectories>
-              <filesets>
-                <fileset>
-                  <directory>${agent-run.directory}</directory>
-                </fileset>
-              </filesets>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
@@ -163,6 +112,57 @@
       <id>native</id>
       <build>
         <plugins>
+          <!-- Run the application with testdata and generate the native image metadata -->
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>exec-maven-plugin</artifactId>
+            <version>3.5.0</version>
+            <executions>
+              <execution>
+                <id>agent</id>
+                <goals>
+                  <goal>exec</goal>
+                </goals>
+                <phase>test</phase>
+                <configuration>
+                  <executable>java</executable>
+                  <workingDirectory>${project.build.directory}</workingDirectory>
+                  <arguments>
+                    <argument>-classpath</argument>
+                    <classpath/>
+                    <argument>-agentlib:native-image-agent=config-output-dir=${project.build.outputDirectory}/META-INF/native-image/com.github.ferstl/skydemon-exporter</argument>
+                    <argument>${mainClass}</argument>
+                    <argument>--data</argument>
+                    <argument>${project.basedir}/etc/testdata</argument>
+                    <argument>${agent-run.directory}</argument>
+                  </arguments>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <!-- Remove the directory that was created by the previous run -->
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-clean-plugin</artifactId>
+            <version>3.3.2</version>
+            <executions>
+              <execution>
+                <id>clean-data</id>
+                <phase>test</phase>
+                <goals>
+                  <goal>clean</goal>
+                </goals>
+                <configuration>
+                  <excludeDefaultDirectories>true</excludeDefaultDirectories>
+                  <filesets>
+                    <fileset>
+                      <directory>${agent-run.directory}</directory>
+                    </fileset>
+                  </filesets>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
           <plugin>
             <groupId>org.graalvm.buildtools</groupId>
             <artifactId>native-maven-plugin</artifactId>
