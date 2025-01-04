@@ -130,7 +130,7 @@
                   <arguments>
                     <argument>-classpath</argument>
                     <classpath/>
-                    <argument>-agentlib:native-image-agent=config-output-dir=${project.build.outputDirectory}/META-INF/native-image/com.github.ferstl/skydemon-exporter</argument>
+                    <argument>-agentlib:native-image-agent=config-merge-dir=${project.build.outputDirectory}/META-INF/native-image/com.github.ferstl/skydemon-exporter</argument>
                     <argument>${mainClass}</argument>
                     <argument>--data</argument>
                     <argument>${project.basedir}/etc/testdata</argument>

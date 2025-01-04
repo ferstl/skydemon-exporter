@@ -59,6 +59,7 @@ public class ExporterRunner implements Callable<Integer> {
     return 0;
   }
 
+  // Make sure to keep src/main/resources/META-INF in sync!
   static class FileVersionProvider implements IVersionProvider {
 
     public String[] getVersion() throws Exception {
