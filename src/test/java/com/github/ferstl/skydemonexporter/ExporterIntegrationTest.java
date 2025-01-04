@@ -10,7 +10,7 @@ class ExporterIntegrationTest {
 
   @Test
   void integrationTest(@TempDir Path tempDir) throws Exception {
-    Exporter exporter = new Exporter(readAirfieldNames(), Paths.get("etc/testdata"), tempDir);
+    Exporter exporter = new Exporter(readAirfieldNames(), new DocumentHandler(Paths.get("etc/testdata"), tempDir));
     exporter.export();
   }
 }

@@ -1,16 +1,24 @@
 package com.github.ferstl.skydemonexporter;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
+import java.util.Comparator;
+import java.util.Objects;
 import com.github.ferstl.skydemonexporter.model.Plate;
 
-public class Document {
+public final class Document implements Comparable<Document> {
 
   private static final String HEL = "hel";
+  private static final Comparator<Document> COMPARATOR = Comparator
+      .comparing(Document::icaoCode)
+      .thenComparing(Document::type)
+      .thenComparing(Document::skydemonDocumentName)
+      .thenComparing(Document::effectiveDate)
+      .thenComparing(Document::originalDocumentName)
+      .thenComparing(Document::name);
 
   private final String icaoCode;
   private final Type type;
-  private final String name;
+  private String name;
   private final LocalDateTime effectiveDate;
   private final boolean isForHelicopter;
   private final boolean nameContainsHelicopter;
@@ -45,8 +53,12 @@ public class Document {
   }
 
 
-  Optional<String> icaoCode() {
-    return Optional.ofNullable(this.icaoCode);
+  String icaoCode() {
+    return this.icaoCode;
+  }
+
+  public Type type() {
+    return this.type;
   }
 
   public String originalDocumentName() {
@@ -57,21 +69,53 @@ public class Document {
     return this.skydemonDocumentName;
   }
 
+  public LocalDateTime effectiveDate() {
+    return this.effectiveDate;
+  }
+
+  public String name() {
+    return this.name;
+  }
+
   public String exportFileName() {
-    return exportName() + ".pdf";
-  }
-
-  public String exportName() {
-    return exportNameWithoutDate() + " (" + this.effectiveDate.toLocalDate() + ")";
-  }
-
-  public String exportNameWithoutDate() {
     return switch (this.type) {
       case CHART -> this.name + (this.isForHelicopter && !this.nameContainsHelicopter ? " (Hel)" : "") + " " + this.icaoCode;
       case AD_INFO -> "AD INFO " + this.icaoCode + (this.isForHelicopter ? " (Hel)" : "");
       case GUIDE -> this.name;
       case SUPPLEMENT -> (this.nameContainsSupplement ? "" : "SUP ") + this.name.replaceAll("/", "-");
-    };
+    } + " (" + this.effectiveDate.toLocalDate() + ")" + ".pdf";
+  }
+
+  public void deconflictName(int index) {
+    this.name = this.name + " " + index;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (!(o instanceof Document document)) {return false;}
+    return Objects.equals(this.icaoCode, document.icaoCode)
+        && this.type == document.type
+        && Objects.equals(this.skydemonDocumentName, document.skydemonDocumentName)
+        && Objects.equals(this.effectiveDate, document.effectiveDate)
+        && Objects.equals(this.originalDocumentName, document.originalDocumentName)
+        && Objects.equals(this.name, document.name);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(
+        this.icaoCode,
+        this.type,
+        this.originalDocumentName,
+        this.effectiveDate,
+        this.skydemonDocumentName,
+        this.name
+    );
+  }
+
+  @Override
+  public int compareTo(Document o) {
+    return COMPARATOR.compare(this, o);
   }
 
   public enum Type {

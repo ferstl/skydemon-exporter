@@ -55,7 +55,7 @@ public class ExporterRunner implements Callable<Integer> {
     Path targetDir = Path.of(expandUserHome(this.targetDir));
     Properties airfieldNames = readAirfieldNames();
 
-    new Exporter(airfieldNames, platesDir, targetDir).export();
+    new Exporter(airfieldNames, new DocumentHandler(platesDir, targetDir)).export();
     return 0;
   }
 

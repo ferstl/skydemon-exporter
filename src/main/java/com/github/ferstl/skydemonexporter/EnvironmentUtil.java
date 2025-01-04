@@ -43,7 +43,7 @@ public class EnvironmentUtil {
     }
   }
 
-  private static Path findSkyDemonDataForWindows() throws IOException {
+  private static Path findSkyDemonDataForWindows() {
     Path indexLocation = Paths.get(System.getenv("APPDATA"), "Divelements Limited", "SkyDemon Plan", "Plates", "index.xml");
 
     if (!Files.exists(indexLocation)) {
